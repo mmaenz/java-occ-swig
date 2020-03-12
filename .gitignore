@@ -1,5 +1,4 @@
 *.i
-*.hxx
 *.log
 **/headers/**
 **/wrapper/**
