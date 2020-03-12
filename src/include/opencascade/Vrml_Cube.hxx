@@ -1,1 +1,0 @@
-#include "/Users/mmaenz/Projects/occt/src/Vrml/Vrml_Cube.hxx"
