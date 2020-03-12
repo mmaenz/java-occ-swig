@@ -41,13 +41,13 @@ config = configparser.ConfigParser()
 config.read('wrapper_generator.conf')
 # pythonocc version
 PYTHONOCC_VERSION = config.get('java-occ-core', 'version')
+JAVA_OCC_CORE_PATH = config.get('java-occ-core', 'path')
 # oce headers location
-OCE_INCLUDE_DIR = config.get('occ_header', 'include_dir')
+OCE_INCLUDE_DIR = config.get('occ-header', 'include_dir')
 if not os.path.isdir(OCE_INCLUDE_DIR):
     raise AssertionError(
         "OpenCascade include dir %s not found." % OCE_INCLUDE_DIR)
 # swig output path
-JAVA_OCC_CORE_PATH = config.get('java-occ-core', 'path')
 SWIG_OUTPUT_PATH = os.path.join(JAVA_OCC_CORE_PATH, 'src', 'wrapper')
 HEADERS_OUTPUT_PATH = os.path.join(
     JAVA_OCC_CORE_PATH, 'src', 'headers')
@@ -1260,7 +1260,7 @@ def process_function_docstring(f):
 
             param_type = param_type.strip()
             parameters_string += "\t:param %s:" % param["name"]
-            #parameters_string += "\t%s(%s)" % (param["name"], param_type, )
+            # parameters_string += "\t%s(%s)" % (param["name"], param_type, )
             if "defaultValue" in param:
                 def_value = adapt_default_value(param["defaultValue"])
                 parameters_string += " default value is %s" % def_value
@@ -1272,7 +1272,7 @@ def process_function_docstring(f):
     ret = adapt_return_type(f["rtnType"])
     if ret != 'void':
         ret = ret.replace("&", "")
-        #ret = ret.replace("virtual", "")
+        # ret = ret.replace("virtual", "")
         ret = fix_type(ret)
         ret = ret.replace(": static ", "")
         ret = ret.replace("static ", "")
@@ -1976,10 +1976,10 @@ def process_classes(classes_dict, exclude_classes, exclude_member_functions):
         # >>> print(box)
         # <OCC.TopoDS.TopoDS_Shape; proxy of <Swig Object of type 'TopoDS_Shape *' at 0x02
         # BCF770> >
-        #class_def_str += '%%extend %s {\n' % class_name
-        #class_def_str += '\t%' + 'pythoncode {\n'
-        #class_def_str += '\t__repr__ = _dumps_object\n'
-        #class_def_str += '\t}\n};\n\n'
+        # class_def_str += '%%extend %s {\n' % class_name
+        # class_def_str += '\t%' + 'pythoncode {\n'
+        # class_def_str += '\t__repr__ = _dumps_object\n'
+        # class_def_str += '\t}\n};\n\n'
         # increment global number of classes
         NB_TOTAL_CLASSES += 1
     return class_def_str
@@ -2089,9 +2089,9 @@ class ModuleWrapper:
         # write windows pragmas to avoid compiler errors
         win_pragmas = """
 %{
-#ifdef WNT
-#pragma warning(disable : 4716)
-#endif
+# ifdef WNT
+# pragma warning(disable : 4716)
+# endif
 %}
 
 """
