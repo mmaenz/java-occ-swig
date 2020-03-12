@@ -116,6 +116,9 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 if not os.path.isdir(SWIG_OUTPUT_PATH):
     os.mkdir(SWIG_OUTPUT_PATH)
 
+if not os.path.isdir(HEADERS_OUTPUT_PATH):
+    os.mkdir(HEADERS_OUTPUT_PATH)
+
 # the following var is set when the module
 # is created
 CURRENT_MODULE = None
