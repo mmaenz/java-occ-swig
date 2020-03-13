@@ -25,39 +25,4 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 %include exception.i
 %include <std_list.i>
 %include <std_string.i>
-%include <std_basic_string.i>
-
-%pythoncode %{
-def _dumps_object(klass):
-    """ Overwrite default string output for any wrapped object.
-    By default, __repr__ method returns something like:
-    <OCC.Core.TopoDS.TopoDS_Shape; proxy of <Swig Object of type 'TopoDS_Shape *' at 0x02BB0758> >
-    This is too much verbose.
-    We prefer :
-    <class 'gp_Pnt'>
-    or
-    <class 'TopoDS_Shape'>
-    """
-    klass_name = str(klass.__class__).split(".")[3].split("'")[0]
-    repr_string = "<class '" + klass_name + "'"
-    # for TopoDS_Shape, we also look for the base type
-    if klass_name == "TopoDS_Shape":
-        if klass.IsNull():
-            repr_string += ": Null>"
-            return repr_string
-        st = klass.ShapeType()
-        types = {OCC.Core.TopAbs.TopAbs_VERTEX: "Vertex",
-                 OCC.Core.TopAbs.TopAbs_SOLID: "Solid",
-                 OCC.Core.TopAbs.TopAbs_EDGE: "Edge",
-                 OCC.Core.TopAbs.TopAbs_FACE: "Face",
-                 OCC.Core.TopAbs.TopAbs_SHELL: "Shell",
-                 OCC.Core.TopAbs.TopAbs_WIRE: "Wire",
-                 OCC.Core.TopAbs.TopAbs_COMPOUND: "Compound",
-                 OCC.Core.TopAbs.TopAbs_COMPSOLID: "Compsolid"}
-        repr_string += "; Type:%s" % types[st]        
-    elif hasattr(klass, "IsNull"):
-        if klass.IsNull():
-            repr_string += "; Null"
-    repr_string += ">"
-    return repr_string
-%}
+//%include <std_basic_string.i>

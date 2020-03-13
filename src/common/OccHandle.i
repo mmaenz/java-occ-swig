@@ -43,12 +43,6 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
  *    %make_alias(MyClass)
  */
 
-%pythoncode {
-    from six import with_metaclass
-    import warnings
-    from OCC.Wrapper.wrapper_utils import Proxy, deprecated
-}
-
 namespace opencascade {
 template <typename T> class handle{};
 }
@@ -185,15 +179,6 @@ WRAP_OCC_TRANSIENT(const, TYPE)
     }
 %}
 
-// This two functions are just for backwards compatibilty
-%extend TYPE {
-  %pythoncode {
-
-    @staticmethod
-    def DownCast(t):
-      return Handle_ ## TYPE ## _DownCast(t)
-   }
-}
 
 %enddef
 

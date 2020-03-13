@@ -415,7 +415,9 @@ class HClassName : public _SequenceType_, public Standard_Transient {
 
 """
 
-NCOLLECTION_ARRAY1_EXTEND_TEMPLATE = '''
+
+NCOLLECTION_ARRAY1_EXTEND_TEMPLATE = ''' '''
+'''
 %extend NCollection_Array1_Template_Instanciation {
     %pythoncode {
     def __getitem__(self, index):
@@ -454,7 +456,8 @@ NCOLLECTION_ARRAY1_EXTEND_TEMPLATE = '''
 # We extend the NCollection_DataMap template with a Keys
 # method that returns a list of Keys
 # TODO: do the same for other Key types
-NCOLLECTION_DATAMAP_EXTEND_TEMPLATE = '''
+NCOLLECTION_DATAMAP_EXTEND_TEMPLATE = ''' '''
+'''
 %extend NCollection_DataMap_Template_Instanciation {
     PyObject* Keys() {
         PyObject *l=PyList_New(0);
@@ -468,7 +471,8 @@ NCOLLECTION_DATAMAP_EXTEND_TEMPLATE = '''
 };
 '''
 
-TEMPLATE__EQ__ = """
+TEMPLATE__EQ__ = """ """
+"""
             %%extend{
                 bool __eq_wrapper__(%s other) {
                 if (*self==other) return true;
@@ -484,7 +488,8 @@ TEMPLATE__EQ__ = """
             }
 """
 
-TEMPLATE__IMUL__ = """
+TEMPLATE__IMUL__ = """ """
+"""
             %%extend{
                 void __imul_wrapper__(%s other) {
                 *self *= other;
@@ -497,7 +502,8 @@ TEMPLATE__IMUL__ = """
             }
 """
 
-TEMPLATE__NE__ = """
+TEMPLATE__NE__ = """ """
+"""
             %%extend{
                 bool __ne_wrapper__(%s other) {
                 if (*self!=other) return true;
@@ -513,7 +519,8 @@ TEMPLATE__NE__ = """
             }
 """
 
-TEMPLATE__IADD__ = """
+TEMPLATE__IADD__ = """ """
+"""
             %%extend{
                 void __iadd_wrapper__(%s other) {
                 *self += other;
@@ -526,7 +533,8 @@ TEMPLATE__IADD__ = """
             }
 """
 
-TEMPLATE__ISUB__ = """
+TEMPLATE__ISUB__ = """ """
+"""
             %%extend{
                 void __isub_wrapper__(%s other) {
                 *self -= other;
@@ -539,7 +547,8 @@ TEMPLATE__ISUB__ = """
             }
 """
 
-TEMPLATE__ITRUEDIV__ = """
+TEMPLATE__ITRUEDIV__ = """ """
+"""
             %%extend{
                 void __itruediv_wrapper__(%s other) {
                 *self /= other;
@@ -1433,10 +1442,11 @@ def process_function(f):
         ##############################################
         # Cases where the method is actually wrapped #
         ##############################################
-        if operator_wrapper[operand] is not None:
-            param = f["parameters"][0]
-            param_type = param["type"].replace("&", "").strip()
-            return operator_wrapper[operand] % param_type
+
+        # if operator_wrapper[operand] is not None:
+        #    param = f["parameters"][0]
+        #    param_type = param["type"].replace("&", "").strip()
+        #    return operator_wrapper[operand] % param_type
 
     # at this point, we can increment the method counter
     NB_TOTAL_METHODS += 1

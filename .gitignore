@@ -4,3 +4,6 @@
 **/wrapper/**
 **/__pycache__/**
 *.pyc
+build/**
+output/**
+__pycache__
