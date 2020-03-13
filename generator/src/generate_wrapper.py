@@ -300,31 +300,31 @@ TEMPLATES_TO_EXCLUDE = ['gp_TrsfNLerp',
 ##########################
 
 BOPDS_HEADER_TEMPLATE = '''
-%include "BOPCol_NCVector.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/BOPCol_NCVector.hxx";
 '''
 
 INTPOLYH_HEADER_TEMPLATE = '''
-%include "IntPolyh_Array.hxx";
-%include "IntPolyh_ArrayOfTriangles.hxx";
-%include "IntPolyh_SeqOfStartPoints.hxx";
-%include "IntPolyh_ArrayOfEdges.hxx";
-%include "IntPolyh_ArrayOfTangentZones.hxx";
-%include "IntPolyh_ArrayOfSectionLines.hxx";
-%include "IntPolyh_ListOfCouples.hxx";
-%include "IntPolyh_ArrayOfPoints.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_Array.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ArrayOfTriangles.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_SeqOfStartPoints.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ArrayOfEdges.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ArrayOfTangentZones.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ArrayOfSectionLines.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ListOfCouples.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/IntPolyh_ArrayOfPoints.hxx";
 '''
 
 BVH_HEADER_TEMPLATE = '''
-%include "BVH_Box.hxx";
-%include "BVH_PrimitiveSet.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/BVH_Box.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/BVH_PrimitiveSet.hxx";
 '''
 
 PRS3D_HEADER_TEMPLATE = '''
-%include "Prs3d_Point.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/Prs3d_Point.hxx";
 '''
 
 BREPALGOAPI_HEADER = '''
-%include "BRepAlgoAPI_Algo.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/BRepAlgoAPI_Algo.hxx";
 '''
 
 GRAPHIC3D_DEFINE_HEADER = '''
@@ -337,32 +337,32 @@ GRAPHIC3D_DEFINE_HEADER = '''
 '''
 
 NCOLLECTION_HEADER_TEMPLATE = '''
-%include "NCollection_TypeDef.hxx";
-%include "NCollection_Array1.hxx";
-%include "NCollection_Array2.hxx";
-%include "NCollection_Map.hxx";
-%include "NCollection_DefaultHasher.hxx";
-%include "NCollection_List.hxx";
-%include "NCollection_Sequence.hxx";
-%include "NCollection_DataMap.hxx";
-%include "NCollection_IndexedMap.hxx";
-%include "NCollection_IndexedDataMap.hxx";
-%include "NCollection_DoubleMap.hxx";
-%include "NCollection_DefineAlloc.hxx";
-%include "Standard_Macro.hxx";
-%include "Standard_DefineAlloc.hxx";
-%include "NCollection_UBTree.hxx";
-%include "NCollection_UBTreeFiller.hxx";
-%include "NCollection_Lerp.hxx";
-%include "NCollection_Vector.hxx";
-%include "NCollection_Vec2.hxx";
-%include "NCollection_Vec3.hxx";
-%include "NCollection_Vec4.hxx";
-%include "NCollection_Mat4.hxx";
-%include "NCollection_TListIterator.hxx";
-%include "NCollection_UtfString.hxx";
-%include "NCollection_UtfIterator.hxx";
-%include "NCollection_SparseArray.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_TypeDef.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Array1.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Array2.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Map.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_DefaultHasher.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_List.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Sequence.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_DataMap.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_IndexedMap.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_IndexedDataMap.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_DoubleMap.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_DefineAlloc.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/Standard_Macro.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/Standard_DefineAlloc.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_UBTree.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_UBTreeFiller.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Lerp.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Vector.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Vec2.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Vec3.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Vec4.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_Mat4.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_TListIterator.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_UtfString.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_UtfIterator.hxx";
+%include "''' + OCE_INCLUDE_DIR + '''/NCollection_SparseArray.hxx";
 
 %ignore NCollection_List::First();
 %ignore NCollection_List::Last();
@@ -2045,10 +2045,6 @@ class ModuleWrapper:
         global CURRENT_MODULE, PYTHON_MODULE_DEPENDENCY
         CURRENT_MODULE = module_name
 
-        MODULE_PATH = os.path.join(toolkit_path, module_name)
-        if not os.path.isdir(MODULE_PATH):
-            os.mkdir(MODULE_PATH)
-
         # all modules depend, by default, upon Standard, NCollection and others
         if module_name not in ['Standard', 'NCollection']:
             PYTHON_MODULE_DEPENDENCY = ['Standard', 'NCollection']
@@ -2080,13 +2076,13 @@ class ModuleWrapper:
         # other dependencies
         self._additional_dependencies = additional_dependencies + HEADER_DEPENDENCY
         # generate swig file
-        self.generate_SWIG_files(MODULE_PATH)
+        self.generate_SWIG_files(toolkit_path)
 
-    def generate_SWIG_files(self, module_path):
+    def generate_SWIG_files(self, toolkit_path):
         #
         # Main file
         #
-        f = open(os.path.join(module_path, "%s.i" %
+        f = open(os.path.join(toolkit_path, "%s.i" %
                               self._module_name), "w")
         # write header
         f.write(LICENSE_HEADER)
@@ -2113,7 +2109,7 @@ class ModuleWrapper:
         includes = ["CommonIncludes", "ExceptionCatcher",
                     "FunctionTransformers", "Operators", "OccHandle"]
         for include in includes:
-            f.write("%%include ../../../../common/%s.i\n" % include)
+            f.write("%%include ../../../common/%s.i\n" % include)
         f.write("\n\n")
         # Here we write required dependencies, headers, as well as
         # other swig interface files
@@ -2147,19 +2143,19 @@ class ModuleWrapper:
                                  os.path.basename(module_header))
         mod_header.write("\n#endif // %s_HXX\n" % self._module_name.upper())
 
-        f.write("#include \"../../../../headers/%s_module.hxx>\n" %
+        f.write("#include \"../../../headers/%s_module.hxx>\n" %
                 self._module_name)
         f.write("\n//Dependencies\n")
         # Include all dependencies
         for dep in PYTHON_MODULE_DEPENDENCY:
-            f.write("#include \"../../../../headers/%s_module.hxx>\n" % dep)
+            f.write("#include \"../../../headers/%s_module.hxx>\n" % dep)
         for add_dep in self._additional_dependencies:
-            f.write("#include \"../../../../headers/%s_module.hxx>\n" % add_dep)
+            f.write("#include \"../../../headers/%s_module.hxx>\n" % add_dep)
 
         f.write("%};\n")
         for dep in PYTHON_MODULE_DEPENDENCY:
             if is_module(dep):
-                f.write("%%import ../../../%s.i\n" % MODULE_PATHS[dep])
+                f.write("%%import ../../%s.i\n" % MODULE_PATHS[dep])
         # for NCollection, we add template classes that can be processed
         # automatically with SWIG
         if self._module_name == "NCollection":
@@ -2227,8 +2223,7 @@ def process_toolkit(toolkit_name, framework_path):
     f.write("\n")
     for module in sorted(modules_list):
         process_module(module, TOOLKIT_OUTPUT_PATH)
-        module_file = module + '/' + module + ".i"
-        f.write("%%import \"%s\"\n" % module_file)
+        f.write("%%import \"%s.i\"\n" % module)
 
     f.close()
 
@@ -2258,7 +2253,7 @@ def process_all_toolkits():
 
 def process_all_frameworks():
     occ = open(os.path.join(SWIG_OUTPUT_PATH, "java_occ_all.i"), "w")
-    occ.write("%%module java_occ_all")
+    occ.write("%%module java_occ_all\n")
     occ.write("\n")
 
     for framework in Frameworks:
