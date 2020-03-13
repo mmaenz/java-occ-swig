@@ -16,7 +16,8 @@
 #
 # OpenCASCADE Toolkits: each ToolKit is a list of modules
 #
-TOOLKIT_Foundation = {'TKernel': ['FSD', 'MMgt', 'OSD', 'Plugin', 'Quantity', 'Resource',
+
+Foundation = {'TKernel': ['FSD', 'MMgt', 'OSD', 'Plugin', 'Quantity', 'Resource',
                                   'Standard', 'StdFail', 'Storage', 'TColStd',
                                   'TCollection', 'TShort', 'Units', 'UnitsAPI',
                                   'NCollection', 'Message'],
@@ -24,7 +25,7 @@ TOOLKIT_Foundation = {'TKernel': ['FSD', 'MMgt', 'OSD', 'Plugin', 'Quantity', 'R
                                  'PLib', 'Precision', 'GeomAbs', 'Poly', 'CSLib',
                                  'Convert', 'Bnd', 'gp', 'TColgp', 'TopLoc', 'BVH', 'Expr',
                                  'ExprIntrp']}
-TOOLKIT_Modeling = {'TKBRep': ['TopoDS', 'TopExp', 'TopTools', 'BRep', 'BRepLProp',
+Modeling = {'TKBRep': ['TopoDS', 'TopExp', 'TopTools', 'BRep', 'BRepLProp',
                                'BRepAdaptor', 'BRepTools', 'BinTools'],
                     'TKG2d': ['Geom2d', 'LProp', 'TColGeom2d', 'Adaptor2d',
                               'Geom2dLProp', 'Geom2dAdaptor', 'Geom2dEvaluator'],
@@ -69,7 +70,7 @@ TOOLKIT_Modeling = {'TKBRep': ['TopoDS', 'TopExp', 'TopTools', 'BRep', 'BRepLPro
                     'TKXMesh': ['XBRepMesh']}
 
 
-TOOLKIT_Visualisation = {'TKService': ['Aspect', 'SelectBasics', 'Image',
+Visualisation = {'TKService': ['Aspect', 'SelectBasics', 'Image',
                                        'InterfaceGraphic', 'TColQuantity'],
                          'TKV3d': ['V3d', 'Graphic3d', 'Visual3d', 'Select3D',
                                    'Prs3d', 'StdPrs', 'SelectMgr', 'PrsMgr',
@@ -78,7 +79,7 @@ TOOLKIT_Visualisation = {'TKService': ['Aspect', 'SelectBasics', 'Image',
                          'TKMeshVS': ['MeshVS']}
 
 
-TOOLKIT_DataExchange = {'TKBinXCAF': ['BinXCAFDrivers', 'BinMXCAFDoc'],
+DataExchange = {'TKBinXCAF': ['BinXCAFDrivers', 'BinMXCAFDoc'],
                         'TKIGES': ['IGESControl', 'IGESData', 'IGESToBRep'],
                         'TKRWMesh' : ['RWGltf', 'RWObj'],
                         'TKSTEP': ['StepAP214', 'RWStepAP214', 'StepAP203', 'RWStepAP203',
@@ -101,7 +102,7 @@ TOOLKIT_DataExchange = {'TKBinXCAF': ['BinXCAFDrivers', 'BinMXCAFDoc'],
                         'TKXmlXCAF': ['XmlXCAFDrivers', 'XmlMXCAFDoc']}
 
 
-TOOLKIT_OCAF = {'TKBin': ['BinDrivers', 'BinMDataXtd', 'BinMNaming'],
+OCAF = {'TKBin': ['BinDrivers', 'BinMDataXtd', 'BinMNaming'],
                 'TKBinL': ['BinLDrivers', 'BinMDF', 'BinMDataStd', 'BinMDocStd',
                            'BinMFunction', 'BinObjMgt'],
                 'TKBinTObj': ['BinTObjDrivers'],
@@ -120,8 +121,9 @@ TOOLKIT_OCAF = {'TKBin': ['BinDrivers', 'BinMDataXtd', 'BinMNaming'],
                            'XmlObjMgt'],
                 'TKXmlTObj': ['XmlTObjDrivers']}
 
-TOOLKIT_VTK = {'TKIVtk': ['IVtk', 'IVtkOCC', 'IVtkVTK', 'IVtkTools']}
+VTK = {'TKIVtk': ['IVtk', 'IVtkOCC', 'IVtkVTK', 'IVtkTools']}
 
+Frameworks = {'Foundation': Foundation, 'Modeling': Modeling, 'Visualisation': Visualisation, 'DataExchange': DataExchange, 'OCAF': OCAF, 'VTK': VTK}
 # List of modules to export
 #
 # (string module_name, list additional headers, list classes_to_exclude,

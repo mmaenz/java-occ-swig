@@ -83,15 +83,23 @@ log.addHandler(console_handler)
 NB_TOTAL_CLASSES = 0  # number of wrapped classes
 NB_TOTAL_METHODS = 0  # number of wrapped methods
 
-ALL_TOOLKITS = [TOOLKIT_Foundation,
-                TOOLKIT_Modeling,
-                TOOLKIT_Visualisation,
-                TOOLKIT_DataExchange,
-                TOOLKIT_OCAF,
-                TOOLKIT_VTK]
+
+ALL_FRAMEWORKS = [Foundation,
+                  Modeling,
+                  Visualisation,
+                  DataExchange,
+                  OCAF,
+                  VTK]
 TOOLKITS = {}
-for tk in ALL_TOOLKITS:
+for tk in ALL_FRAMEWORKS:
     TOOLKITS.update(tk)
+
+MODULE_PATHS = {}
+for framework in Frameworks:
+    for toolkit in Frameworks[framework]:
+        for module in TOOLKITS[toolkit]:
+            MODULE_PATHS[module] = framework + '/' + toolkit + "/" + module
+
 
 LICENSE_HEADER = """/*
 Copyright 2008-2020 Thomas Paviot (tpaviot@gmail.com)
@@ -2032,10 +2040,15 @@ def parse_module(module_name):
 
 class ModuleWrapper:
     def __init__(self, module_name, additional_dependencies,
-                 exclude_classes, exclude_member_functions):
+                 exclude_classes, exclude_member_functions, toolkit_path):
         # Reinit global variables
         global CURRENT_MODULE, PYTHON_MODULE_DEPENDENCY
         CURRENT_MODULE = module_name
+
+        MODULE_PATH = os.path.join(toolkit_path, module_name)
+        if not os.path.isdir(MODULE_PATH):
+            os.mkdir(MODULE_PATH)
+
         # all modules depend, by default, upon Standard, NCollection and others
         if module_name not in ['Standard', 'NCollection']:
             PYTHON_MODULE_DEPENDENCY = ['Standard', 'NCollection']
@@ -2067,13 +2080,13 @@ class ModuleWrapper:
         # other dependencies
         self._additional_dependencies = additional_dependencies + HEADER_DEPENDENCY
         # generate swig file
-        self.generate_SWIG_files()
+        self.generate_SWIG_files(MODULE_PATH)
 
-    def generate_SWIG_files(self):
+    def generate_SWIG_files(self, module_path):
         #
         # Main file
         #
-        f = open(os.path.join(SWIG_OUTPUT_PATH, "%s.i" %
+        f = open(os.path.join(module_path, "%s.i" %
                               self._module_name), "w")
         # write header
         f.write(LICENSE_HEADER)
@@ -2100,7 +2113,7 @@ class ModuleWrapper:
         includes = ["CommonIncludes", "ExceptionCatcher",
                     "FunctionTransformers", "Operators", "OccHandle"]
         for include in includes:
-            f.write("%%include ../common/%s.i\n" % include)
+            f.write("%%include ../../../../common/%s.i\n" % include)
         f.write("\n\n")
         # Here we write required dependencies, headers, as well as
         # other swig interface files
@@ -2134,18 +2147,19 @@ class ModuleWrapper:
                                  os.path.basename(module_header))
         mod_header.write("\n#endif // %s_HXX\n" % self._module_name.upper())
 
-        f.write("#include \"../headers/%s_module.hxx>\n" % self._module_name)
+        f.write("#include \"../../../../headers/%s_module.hxx>\n" %
+                self._module_name)
         f.write("\n//Dependencies\n")
         # Include all dependencies
         for dep in PYTHON_MODULE_DEPENDENCY:
-            f.write("#include \"../headers/%s_module.hxx>\n" % dep)
+            f.write("#include \"../../../../headers/%s_module.hxx>\n" % dep)
         for add_dep in self._additional_dependencies:
-            f.write("#include \"../headers/%s_module.hxx>\n" % add_dep)
+            f.write("#include \"../../../../headers/%s_module.hxx>\n" % add_dep)
 
         f.write("%};\n")
         for dep in PYTHON_MODULE_DEPENDENCY:
             if is_module(dep):
-                f.write("%%import %s.i\n" % dep)
+                f.write("%%import ../../../%s.i\n" % MODULE_PATHS[dep])
         # for NCollection, we add template classes that can be processed
         # automatically with SWIG
         if self._module_name == "NCollection":
@@ -2158,6 +2172,7 @@ class ModuleWrapper:
             f.write(GRAPHIC3D_DEFINE_HEADER)
         if self._module_name == "BRepAlgoAPI":
             f.write(BREPALGOAPI_HEADER)
+        f.write("\n")
         # write public enums
         f.write(self._enums_str)
         # write wrap_handles
@@ -2173,7 +2188,7 @@ class ModuleWrapper:
         f.close()
 
 
-def process_module(module_name):
+def process_module(module_name, toolkit_path):
     all_modules = OCE_MODULES
     module_exist = False
     for module in all_modules:
@@ -2189,21 +2204,36 @@ def process_module(module_name):
             ModuleWrapper(module_name,
                           module_additionnal_dependencies,
                           module_exclude_classes,
-                          modules_exclude_member_functions)
+                          modules_exclude_member_functions,
+                          toolkit_path)
     if not module_exist:
         raise NameError('Module %s not defined' % module_name)
 
 
-def process_toolkit(toolkit_name):
+def process_toolkit(toolkit_name, framework_path):
     """ Generate wrappers for modules depending on a toolkit
     For instance : TKernel, TKMath etc.
     """
     modules_list = TOOLKITS[toolkit_name]
     logging.info("Processing toolkit %s ===" % toolkit_name)
+
+    TOOLKIT_OUTPUT_PATH = os.path.join(framework_path, toolkit_name)
+    if not os.path.isdir(TOOLKIT_OUTPUT_PATH):
+        os.mkdir(TOOLKIT_OUTPUT_PATH)
+
+    f = open(os.path.join(TOOLKIT_OUTPUT_PATH, "%s.i" %
+                          toolkit_name), "w")
+    f.write("%%module %s\n" % toolkit_name)
+    f.write("\n")
     for module in sorted(modules_list):
-        process_module(module)
+        process_module(module, TOOLKIT_OUTPUT_PATH)
+        module_file = module + '/' + module + ".i"
+        f.write("%%import \"%s\"\n" % module_file)
+
+    f.close()
 
 
+"""
 def process_all_toolkits():
     parallel_build = config.get('build', 'parallel_build')
     if parallel_build == "True":  # multitask
@@ -2223,6 +2253,34 @@ def process_all_toolkits():
         logging.info("Single process mode")
         for toolkit in sorted(TOOLKITS):
             process_toolkit(toolkit)
+"""
+
+
+def process_all_frameworks():
+    occ = open(os.path.join(SWIG_OUTPUT_PATH, "java_occ_all.i"), "w")
+    occ.write("%%module java_occ_all")
+    occ.write("\n")
+
+    for framework in Frameworks:
+        FRAMEWORK_PATH = os.path.join(SWIG_OUTPUT_PATH, framework)
+        if not os.path.isdir(FRAMEWORK_PATH):
+            os.mkdir(FRAMEWORK_PATH)
+
+        f = open(os.path.join(FRAMEWORK_PATH, "%s.i" % framework), "w")
+        f.write("%%module %s\n" % framework)
+        f.write("\n")
+
+        for toolkit in sorted(Frameworks[framework]):
+            process_toolkit(toolkit, FRAMEWORK_PATH)
+            toolkit_file = toolkit + '/' + toolkit + ".i"
+            f.write("%%import \"%s\"\n" % toolkit_file)
+
+        f.close()
+        framework_file = framework + '/' + framework + ".i"
+        occ.write("%%import \"%s\"\n" % framework_file)
+        occ.flush()
+
+    occ.close
 
 
 def run_unit_tests():
@@ -2243,12 +2301,8 @@ if __name__ == '__main__':
     run_unit_tests()
     logging.info(get_log_header())
     start_time = time.time()
-    if len(sys.argv) > 1:
-        for module_to_process in sys.argv[1:]:
-            process_module(module_to_process)
-    else:
-        write__init__()
-        process_all_toolkits()
+    write__init__()
+    process_all_frameworks()
     end_time = time.time()
     total_time = end_time - start_time
     # footer
